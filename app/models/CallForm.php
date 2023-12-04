@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Utils\Phone;
 use Leaf\Model;
 
 class CallForm {
@@ -10,6 +11,8 @@ class CallForm {
         private string $comment,
         private string $fullName,
         private string $companyName,
+        private int $employeeNumber,
+        private Phone $phone,
         private array $files = []
     ) {}
 
@@ -46,5 +49,25 @@ class CallForm {
     public function setCompanyName(string $companyName): void
     {
         $this->companyName = $companyName;
+    }
+
+    public function getPhone(): Phone
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(Phone $phone): void
+    {
+        $this->phone = $phone;
+    }
+
+    public function getEmployeeNumber(): int
+    {
+        return $this->employeeNumber;
+    }
+
+    public function setEmployeeNumber(int $employeeNumber): void
+    {
+        $this->employeeNumber = $employeeNumber;
     }
 }
