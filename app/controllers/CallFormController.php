@@ -3,12 +3,16 @@
 namespace App\Controllers;
 
 use Leaf\Controller;
-use objects\Email;
 
 class CallFormController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function get(): void
     {
-        response()->json(['email' => new Email('ubluewolfu@gmail.com')]);
+        response()->json('');
     }
 }

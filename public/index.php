@@ -107,4 +107,9 @@ Leaf\Core::loadApplicationConfig();
 | This line brings in all your routes and starts your application
 |
 */
+
+foreach (glob(__DIR__ . '/../dependecies/*.php') as $file) {
+    require_once $file;
+}
+
 \Leaf\Core::runApplication();
