@@ -2,14 +2,10 @@
 
 namespace App\Utils;
 
-use App\Exceptions\HttpException;
 use Leaf\Form;
 
 class Validator
 {
-    /**
-     * @throws HttpException
-     */
     public function validate(array $rules, array $data): void
     {
         $form = new Form();

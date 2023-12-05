@@ -31,8 +31,8 @@ class CallFormController extends Controller
             'fullName' => ['required', 'min:3'],
             'companyName' => ['required', 'min:3'],
             'employeeNumber' => ['required', 'number'],
-            'phone' => ['required', 'regex:"' . str_replace('/', '', Phone::REGEX) . '"'],
-            'email' => ['required', 'regex:"' . str_replace('/', '', Email::REGEX) . '"']
+            'phone' => ['required', 'regex:"' . Phone::REGEX],
+            'email' => ['required', 'regex:"' . Email::REGEX]
         ], $body);
 
         $dto = new CallFormCreationDto(
@@ -50,8 +50,15 @@ class CallFormController extends Controller
 
     public function getAll(): void
     {
+        $body = $this->request->body();
 
-        //$response = $this->repository->getAll(new Pagination(2, 1));
-        $this->response->json($this->request->b);
+        $this->validator->validate([
+            'page' => ['required', 'regex:"^[1-9][0-9]*$"'],
+            'count' => ['required', 'regex:"^[1-9][0-9]*$"']
+        ], $body);
+
+        $pagination = new Pagination((int) $body['page'], (int) $body['count']);
+        $response = $this->repository->getAll($pagination);
+        $this->response->json($response);
     }
 }
