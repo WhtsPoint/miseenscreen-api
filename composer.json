@@ -60,12 +60,12 @@
             "App\\Notifications\\": "app/notifications/",
             "App\\Database\\Seeds\\": "app/database/seeds/",
             "App\\Database\\Schema\\": "app/database/schema/",
-            "App\\Database\\Factories\\": "app/database/factories/",
+            "App\\Factories\\": "app/factories/",
             "App\\Exceptions\\": "app/exceptions",
             "App\\Repositories\\": "app/repositories",
             "App\\Interfaces\\": "app/interfaces",
             "App\\Traits\\": "app/traits",
-            "App\\Factories\\": "app/factories"
+            "App\\Dto\\": "app/dto"
         }
     },
     "config": {

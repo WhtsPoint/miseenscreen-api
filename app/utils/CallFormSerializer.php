@@ -26,7 +26,7 @@ class CallFormSerializer
             'comment' => $form->getComment(),
             'full_name' => $form->getFullName(),
             'company_name' => $form->getCompanyName(),
-            'files' => [],
+            'files' => $form->getFiles(),
             'phone' => $form->getPhone(),
             'employee_number' => $form->getEmployeeNumber()
         ];

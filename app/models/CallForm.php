@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Utils\Email;
 use App\Utils\Phone;
-use Leaf\Model;
 
 class CallForm {
     public function __construct(
@@ -13,6 +13,7 @@ class CallForm {
         private string $companyName,
         private int $employeeNumber,
         private Phone $phone,
+        private Email $email,
         private array $files = []
     ) {}
 
@@ -69,5 +70,20 @@ class CallForm {
     public function setEmployeeNumber(int $employeeNumber): void
     {
         $this->employeeNumber = $employeeNumber;
+    }
+
+    public function getEmail(): Email
+    {
+        return $this->email;
+    }
+
+    public function setEmail(Email $email): void
+    {
+        $this->email = $email;
+    }
+
+    public function getFiles(): array
+    {
+        return $this->files;
     }
 }

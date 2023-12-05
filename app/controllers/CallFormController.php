@@ -2,17 +2,22 @@
 
 namespace App\Controllers;
 
+use App\Services\CallFormService;
 use Leaf\Controller;
 
 class CallFormController extends Controller
 {
-    public function __construct()
-    {
+
+    public function __construct(
+        protected CallFormService $service
+    ) {
         parent::__construct();
     }
 
-    public function get(): void
+    public function create(): void
     {
-        response()->json('');
+        $data = $this->request->body();
+
+        response()->json($data);
     }
 }
