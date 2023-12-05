@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\CallFormNotFoundException;
 use App\interfaces\CallFormRepositoryInterface;
 use App\Models\CallForm;
 use App\Utils\CallFormSerializer;
@@ -41,10 +42,23 @@ class CallFormRepository implements CallFormRepositoryInterface
         );
     }
 
+    /**
+     * @throws CallFormNotFoundException
+     */
     public function deleteById(string $id): void
     {
+        if ($this->isExists($id) === false) {
+            throw new CallFormNotFoundException();
+        }
+
         $this->database->delete('call_forms')
             ->where('id', $id)
             ->execute();
+    }
+
+    public function isExists(string $id): bool
+    {
+        return $this->database->query('SELECT COUNT(*) AS count FROM call_forms WHERE id = ?')
+            ->bind($id)->fetchAll()[0]['count'] !== 0;
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Dto\CallFormCreationDto;
+use App\Exceptions\CallFormNotFoundException;
 use App\Interfaces\CallFormRepositoryInterface;
 use App\Services\CallFormService;
 use App\Utils\Email;
@@ -50,7 +51,7 @@ class CallFormController extends Controller
 
     public function getAll(): void
     {
-        $body = $this->request->body();
+        $body = $this->request->urlData();
 
         $this->validator->validate([
             'page' => ['required', 'regex:"^[1-9][0-9]*$"'],
@@ -60,5 +61,15 @@ class CallFormController extends Controller
         $pagination = new Pagination((int) $body['page'], (int) $body['count']);
         $response = $this->repository->getAll($pagination);
         $this->response->json($response);
+    }
+
+    public function deleteById(string $id): void
+    {
+        try {
+            $this->repository->deleteById($id);
+            $this->response->json(['success' => true]);
+        } catch (CallFormNotFoundException) {
+            $this->response->json(['error' => 'Call form with this id is not exists'], 404);
+        }
     }
 }
