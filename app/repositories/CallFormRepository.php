@@ -22,7 +22,7 @@ class CallFormRepository implements CallFormRepositoryInterface
             ->params([
                 ...$this->serializer->toArray($form),
                 'files' => json_encode($form->getFiles())
-            ]);
+            ])->execute();
     }
 
     /**
@@ -36,7 +36,7 @@ class CallFormRepository implements CallFormRepositoryInterface
         ->fetchAll();
 
         return array_map(
-            fn ($params) => $this->serializer->fromArray($params),
+            fn ($params) => $this->serializer->fromArrayToDto($params),
             $forms
         );
     }

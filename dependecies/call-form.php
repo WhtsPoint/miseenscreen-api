@@ -8,6 +8,7 @@ use App\Interfaces\CallFormRepositoryInterface;
 use App\Repositories\CallFormRepository;
 use App\Services\CallFormService;
 use App\Utils\CallFormSerializer;
+use App\Utils\Validator;
 use Leaf\Db;
 
 app()->register(CallFormSerializer::class, function () {
@@ -34,6 +35,8 @@ app()->register(CallFormService::class, function () {
 
 app()->register(CallFormController::class, function () {
     return new CallFormController(
-        app()->{CallFormService::class}
+        app()->{CallFormService::class},
+        app()->{CallFormRepositoryInterface::class},
+        app()->{Validator::class}
     );
 });

@@ -2,20 +2,22 @@
 
 namespace App\Utils;
 
+use App\Dto\CallFormDto;
 use App\Models\CallForm;
 
 class CallFormSerializer
 {
-    public function fromArray(array $formParams): CallForm
+    public function fromArrayToDto(array $formParams): CallFormDto
     {
-        return new CallForm(
+        return new CallFormDto(
             $formParams['id'],
             $formParams['comment'],
-            $formParams['fullName'],
-            $formParams['companyName'],
-            $formParams['employeeNumber'],
+            $formParams['full_name'],
+            $formParams['company_name'],
+            $formParams['employee_number'],
             new Phone($formParams['phone']),
-            $formParams['files']
+            new Email($formParams['email']),
+            json_decode($formParams['files'])
         );
     }
 
@@ -27,8 +29,9 @@ class CallFormSerializer
             'full_name' => $form->getFullName(),
             'company_name' => $form->getCompanyName(),
             'files' => $form->getFiles(),
-            'phone' => $form->getPhone(),
-            'employee_number' => $form->getEmployeeNumber()
+            'phone' => $form->getPhone()->get(),
+            'employee_number' => $form->getEmployeeNumber(),
+            'email' => $form->getEmail()->get()
         ];
     }
 }

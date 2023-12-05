@@ -4,12 +4,12 @@ namespace App\Services;
 use App\Dto\CallFormCreationDto;
 use App\Dto\CallFormCreationResultDto;
 use App\factories\CallFormFactory;
-use App\repositories\CallFormRepository;
+use App\Interfaces\CallFormRepositoryInterface;
 
 class CallFormService
 {
     public function __construct(
-        protected CallFormRepository $repository,
+        protected CallFormRepositoryInterface $repository,
         protected CallFormFactory $factory
     ) {}
 

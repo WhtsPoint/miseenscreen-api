@@ -10,11 +10,11 @@ class Email implements JsonSerializable
 {
     use StringValueObjectTrait;
 
-    public const REGEX = '/^[\w\-\.]+@([\w-]+\.)+[\w-]{2,4}$/';
+    public const REGEX = '^[\w\-\.]+@([\w-]+\.)+[\w-]{2,4}$';
 
     public function __construct($value)
     {
-        if (preg_match(self::REGEX, $value) === false) {
+        if (preg_match('/' . self::REGEX . '/', $value) === false) {
             throw new InvalidArgumentException('Invalid email format');
         }
 

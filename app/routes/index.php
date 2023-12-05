@@ -6,6 +6,7 @@ app()->set404(function () {
 	response()->json('Resource not found', 404, true);
 });
 
+
 app()->setErrorHandler(function () {
     response()->json('Internal error', 500, true);
 });
