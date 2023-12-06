@@ -2,6 +2,13 @@
 
 namespace App\Models;
 
+use App\Dto\DeleteFileDto;
+use App\Dto\UploadCallFormFileDto;
+use App\Dto\UploadFileDto;
+use App\Exceptions\FileIsAlreadyExistsException;
+use App\Exceptions\FileNotFoundException;
+use App\Interfaces\CallFormFileDeleteInterface;
+use App\Interfaces\CallFormFileUploadInterface;
 use App\Utils\Email;
 use App\Utils\Phone;
 
@@ -85,5 +92,33 @@ class CallForm {
     public function getFiles(): array
     {
         return $this->files;
+    }
+
+    /**
+     * @throws FileIsAlreadyExistsException
+     */
+    public function addFile(
+        UploadCallFormFileDto $dto,
+        CallFormFileUploadInterface $storage
+    ): void {
+        $storage->upload(new UploadFileDto(
+            $dto->path,
+            $dto->fileName,
+            $this->getId()
+        ));
+
+        $this->files []= $dto->fileName;
+    }
+
+    /**
+     * @throws FileNotFoundException
+     */
+    public function removeFile(
+        DeleteFileDto $dto,
+        CallFormFileDeleteInterface $storage
+    ): void {
+        $storage->delete($dto);
+
+        $this->files = array_diff($this->files, [$dto->fileName]);
     }
 }
