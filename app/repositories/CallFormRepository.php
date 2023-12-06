@@ -27,6 +27,22 @@ class CallFormRepository implements CallFormRepositoryInterface
     }
 
     /**
+     * @throws CallFormNotFoundException
+     */
+    public function getById(string $id): CallForm
+    {
+        $params = $this->database->query(
+            'SELECT * FROM call_forms WHERE id = ?'
+        )->bind($id)->first();
+
+        if ($params === false) {
+            throw new CallFormNotFoundException();
+        }
+
+        return $this->serializer->fromArray($params);
+    }
+
+    /**
      * @return CallForm[]
      */
     public function getAll(Pagination $pagination): array
@@ -37,7 +53,7 @@ class CallFormRepository implements CallFormRepositoryInterface
         ->fetchAll();
 
         return array_map(
-            fn ($params) => $this->serializer->fromArrayToDto($params),
+            fn ($params) => $this->serializer->fromArray($params),
             $forms
         );
     }

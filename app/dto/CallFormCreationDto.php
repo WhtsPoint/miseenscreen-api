@@ -12,6 +12,8 @@ class CallFormCreationDto
         public string $companyName,
         public int $employeeNumber,
         public string $phone,
-        public string $email
+        public string $email,
+        /** @var FileDto[] */
+        public array $files
     ) {}
 }

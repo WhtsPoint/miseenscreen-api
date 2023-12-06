@@ -2,13 +2,12 @@
 
 namespace App\Interfaces;
 
-use App\Dto\DeleteFileDto;
-use App\Exceptions\FileNotFoundException;
+use App\Exceptions\CallFormDirNotFound;
 
 interface CallFormFileDeleteInterface
 {
     /**
-     * @throws FileNotFoundException
+     * @throws CallFormDirNotFound
      */
-    public function delete(DeleteFileDto $dto): void;
+    public function deleteAll(string $id): void;
 }

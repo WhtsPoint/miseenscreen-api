@@ -7,9 +7,9 @@ use App\Models\CallForm;
 
 class CallFormSerializer
 {
-    public function fromArrayToDto(array $formParams): CallFormDto
+    public function fromArray(array $formParams): CallForm
     {
-        return new CallFormDto(
+        return new CallForm(
             $formParams['id'],
             $formParams['comment'],
             $formParams['full_name'],
@@ -18,6 +18,20 @@ class CallFormSerializer
             new Phone($formParams['phone']),
             new Email($formParams['email']),
             json_decode($formParams['files'])
+        );
+    }
+
+    public function toDto(CallForm $form): CallFormDto
+    {
+        return new CallFormDto(
+            $form->getId(),
+            $form->getComment(),
+            $form->getFullName(),
+            $form->getCompanyName(),
+            $form->getEmployeeNumber(),
+            $form->getPhone(),
+            $form->getEmail(),
+            $form->getFiles()
         );
     }
 

@@ -2,10 +2,9 @@
 
 namespace App\Utils;
 
-use App\Dto\DeleteFileDto;
 use App\Dto\UploadFileDto;
 use App\Exceptions\FileIsAlreadyExistsException;
-use App\Exceptions\FileNotFoundException;
+use App\Exceptions\CallFormDirNotFound;
 use App\Interfaces\CallFormFileDeleteInterface;
 use App\Interfaces\CallFormFileUploadInterface;
 
@@ -35,14 +34,21 @@ class CallFormFileStorage implements CallFormFileDeleteInterface, CallFormFileUp
         move_uploaded_file($dto->path, $filePath);
     }
 
-    public function delete(DeleteFileDto $dto): void
+    /**
+     * @throws CallFormDirNotFound
+     */
+    public function deleteAll(string $id): void
     {
-        $filePath = $this->path . $dto->path . '/' . $dto->fileName;
+        $dirPath = $this->path . $id;
 
-        if (is_file($filePath) === false) {
-            throw new FileNotFoundException();
+        if (is_dir($dirPath) === false) {
+            throw new CallFormDirNotFound();
         }
 
-        unlink($filePath);
+        foreach (array_diff(scandir($dirPath), ['.', '..']) as $file) {
+            unlink($dirPath . '/' . $file);
+        }
+
+        rmdir($dirPath);
     }
 }
