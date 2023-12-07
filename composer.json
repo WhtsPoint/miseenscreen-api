@@ -29,7 +29,8 @@
         "leafs/cors": "*",
         "leafs/auth": "*",
         "leafs/db": "*",
-        "ext-pdo": "*"
+        "ext-pdo": "*",
+      "ext-fileinfo": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.16"

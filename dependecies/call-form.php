@@ -11,6 +11,7 @@ use App\Repositories\CallFormRepository;
 use App\Services\CallFormFileService;
 use App\Services\CallFormService;
 use App\Utils\CallFormSerializer;
+use App\Utils\FileResponse;
 use App\Utils\FileSerializer;
 use App\Utils\Validator;
 use Leaf\Db;
@@ -51,6 +52,7 @@ app()->register(CallFormController::class, function () {
         app()->{CallFormService::class},
         app()->{CallFormFileService::class},
         app()->{Validator::class},
-        app()->{FileSerializer::class}
+        app()->{FileSerializer::class},
+        app()->{FileResponse::class}
     );
 });

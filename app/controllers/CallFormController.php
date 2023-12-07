@@ -8,10 +8,10 @@ use App\Exceptions\CallFormDirNotFound;
 use App\Exceptions\CallFormNotFoundException;
 use App\Exceptions\FileIsAlreadyExistsException;
 use App\Exceptions\FileNotFoundException;
-use App\Interfaces\CallFormRepositoryInterface;
 use App\Services\CallFormFileService;
 use App\Services\CallFormService;
 use App\Utils\Email;
+use App\Utils\FileResponse;
 use App\Utils\FileSerializer;
 use App\Utils\Pagination;
 use App\Utils\Phone;
@@ -20,12 +20,12 @@ use Leaf\Controller;
 
 class CallFormController extends Controller
 {
-
     public function __construct(
         protected CallFormService $service,
-            protected CallFormFileService $fileService,
+        protected CallFormFileService $fileService,
         protected Validator $validator,
-        protected FileSerializer $fileSerializer
+        protected FileSerializer $fileSerializer,
+        protected FileResponse $fileResponse
     ) {
         parent::__construct();
     }
@@ -91,10 +91,6 @@ class CallFormController extends Controller
         }
     }
 
-    /**
-     * @throws CallFormNotFoundException
-     * @throws FileNotFoundException
-     */
     public function getFile(): void
     {
         $body = $this->request->body();
@@ -109,17 +105,13 @@ class CallFormController extends Controller
             $body['file']
         );
 
-        $file = $this->fileService->getFilePath($dto);
-
-        header('Content-Description: File Transfer');
-        header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename=' . basename($file));
-        header('Content-Transfer-Encoding: binary');
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-        header('Pragma: public');
-        header('Content-Length: ' . filesize($file));
-        ob_clean();
-        flush();
+        try {
+            $file = $this->fileService->getFilePath($dto);
+            $this->fileResponse->response($file);
+        } catch (FileNotFoundException) {
+            $this->response->json(['error' => 'File not found'], 404);
+        } catch (CallFormNotFoundException) {
+            $this->response->json(['error' => 'Call form with this id is not exists'], 404);
+        }
     }
 }

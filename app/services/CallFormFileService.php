@@ -22,7 +22,7 @@ class CallFormFileService
     {
         $form = $this->repository->getById($dto->id);
 
-        if ($form->getFiles()[$dto->file] === null) {
+        if (in_array($dto->file, $form->getFiles()) === false) {
             throw new FileNotFoundException();
         }
 

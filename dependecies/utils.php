@@ -3,6 +3,7 @@
 use App\Interfaces\CallFormFileDeleteInterface;
 use App\Interfaces\CallFormFileUploadInterface;
 use App\Utils\CallFormFileStorage;
+use App\Utils\FileResponse;
 use App\Utils\FileSerializer;
 use App\Utils\Validator;
 
@@ -24,4 +25,8 @@ app()->register(CallFormFileUploadInterface::class . '&' . CallFormFileDeleteInt
 
 app()->register(FileSerializer::class, function () {
     return new FileSerializer();
+});
+
+app()->register(FileResponse::class, function () {
+    return new FileResponse();
 });
