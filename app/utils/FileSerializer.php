@@ -13,7 +13,7 @@ class FileSerializer
     {
         $result = [];
 
-        for ($i = 0; $i < count($files['name']); $i++) {
+        foreach (array_keys(@$files['name'] ?? []) as $i) {
             $result []= new FileDto(
                 $files['name'][$i],
                 $files['full_path'][$i],
