@@ -37,6 +37,10 @@ class CallFormController extends Controller
     {
         $body = $this->request->body();
 
+        $files = $this->fileSerializer->toCorrectFormat(
+            $this->request->files()['files'] ?? []
+        );
+
         $this->validator->validate([
             'comment' => ['required', 'min:3'],
             'fullName' => ['required', 'min:3'],
@@ -46,9 +50,7 @@ class CallFormController extends Controller
             'email' => ['required', 'regex:"' . Email::REGEX . '"']
         ], $body);
 
-        $files = $this->fileSerializer->toCorrectFormat(
-            $this->request->files()['files'] ?? []
-        );
+        $this->validator->validateFiles($files);
 
         $dto = new CallFormCreationDto(
             $body['comment'],
