@@ -4,6 +4,7 @@ namespace Dependencies;
 
 use App\Controllers\CallFormController;
 use App\Factories\CallFormFactory;
+use App\Interfaces\AuthenticationInterface;
 use App\Interfaces\CallFormFileDeleteInterface;
 use App\Interfaces\CallFormFileUploadInterface;
 use App\Interfaces\CallFormRepositoryInterface;
@@ -53,6 +54,7 @@ app()->register(CallFormController::class, function () {
         app()->{CallFormFileService::class},
         app()->{Validator::class},
         app()->{FileSerializer::class},
-        app()->{FileResponse::class}
+        app()->{FileResponse::class},
+        app()->{AuthenticationInterface::class}
     );
 });

@@ -8,6 +8,7 @@ use App\Exceptions\CallFormDirNotFound;
 use App\Exceptions\CallFormNotFoundException;
 use App\Exceptions\FileIsAlreadyExistsException;
 use App\Exceptions\FileNotFoundException;
+use App\Interfaces\AuthenticationInterface;
 use App\Services\CallFormFileService;
 use App\Services\CallFormService;
 use App\Utils\Email;
@@ -17,6 +18,7 @@ use App\Utils\Pagination;
 use App\Utils\Phone;
 use App\Utils\Validator;
 use Leaf\Controller;
+use Leaf\Db;
 
 class CallFormController extends Controller
 {
@@ -25,7 +27,8 @@ class CallFormController extends Controller
         protected CallFormFileService $fileService,
         protected Validator $validator,
         protected FileSerializer $fileSerializer,
-        protected FileResponse $fileResponse
+        protected FileResponse $fileResponse,
+        protected AuthenticationInterface $authentication
     ) {
         parent::__construct();
     }
@@ -68,6 +71,7 @@ class CallFormController extends Controller
 
     public function getAll(): void
     {
+        $this->authentication->verifyIsLogged();
         $body = $this->request->urlData();
 
         $this->validator->validate([
@@ -85,6 +89,8 @@ class CallFormController extends Controller
      */
     public function deleteById(string $id): void
     {
+        $this->authentication->verifyIsLogged();
+
         try {
             $this->service->deleteById($id);
             $this->response->json(['success' => true]);
@@ -95,6 +101,7 @@ class CallFormController extends Controller
 
     public function getFile(): void
     {
+        $this->authentication->verifyIsLogged();
         $body = $this->request->body();
 
         $this->validator->validate([

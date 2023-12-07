@@ -33,7 +33,7 @@ return [
     | and update methods
     |
     */
-    'USE_TIMESTAMPS' => true,
+    'USE_TIMESTAMPS' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -184,5 +184,5 @@ return [
     | How long should JWT be valid for?
     |
     */
-    'TOKEN_LIFETIME' => 60 * 60 * 24 * 365,
+    'TOKEN_LIFETIME' => 60 * 60 * 24,
 ];
