@@ -32,19 +32,9 @@ class CallForm {
         return $this->comment;
     }
 
-    public function setComment(string $comment): void
-    {
-        $this->comment = $comment;
-    }
-
     public function getFullName(): string
     {
         return $this->fullName;
-    }
-
-    public function setFullName(string $fullName): void
-    {
-        $this->fullName = $fullName;
     }
 
     public function getCompanyName(): string
@@ -52,19 +42,9 @@ class CallForm {
         return $this->companyName;
     }
 
-    public function setCompanyName(string $companyName): void
-    {
-        $this->companyName = $companyName;
-    }
-
     public function getPhone(): Phone
     {
         return $this->phone;
-    }
-
-    public function setPhone(Phone $phone): void
-    {
-        $this->phone = $phone;
     }
 
     public function getEmployeeNumber(): int
@@ -72,19 +52,9 @@ class CallForm {
         return $this->employeeNumber;
     }
 
-    public function setEmployeeNumber(int $employeeNumber): void
-    {
-        $this->employeeNumber = $employeeNumber;
-    }
-
     public function getEmail(): Email
     {
         return $this->email;
-    }
-
-    public function setEmail(Email $email): void
-    {
-        $this->email = $email;
     }
 
     public function getFiles(): array
