@@ -4,7 +4,6 @@ namespace App\Services;
 use App\Dto\CallFormCreationDto;
 use App\Dto\CallFormCreationResultDto;
 use App\Dto\CallFormDto;
-use App\Exceptions\CallFormDirNotFound;
 use App\exceptions\CallFormNotFoundException;
 use App\Exceptions\FileIsAlreadyExistsException;
 use App\factories\CallFormFactory;
@@ -49,7 +48,6 @@ class CallFormService
 
     /**
      * @throws CallFormNotFoundException
-     * @throws CallFormDirNotFound
      */
     public function deleteById(string $id): void
     {

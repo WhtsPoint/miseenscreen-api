@@ -66,7 +66,8 @@
             "App\\Repositories\\": "app/repositories",
             "App\\Interfaces\\": "app/interfaces",
             "App\\Traits\\": "app/traits",
-            "App\\Dto\\": "app/dto"
+            "App\\Dto\\": "app/dto",
+            "App\\Migrations\\": "migrations"
         }
     },
     "config": {

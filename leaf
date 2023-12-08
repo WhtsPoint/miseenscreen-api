@@ -12,6 +12,10 @@
 | loading of any our classes "manually". Feels great to relax.
 |
 */
+
+use App\Console\MigrateCommand;
+use App\Console\CreateUserCommand;
+
 require __DIR__ . '/vendor/autoload.php';
 
 /*
@@ -40,7 +44,7 @@ try {
 |
 */
 Leaf\Core::loadApplicationConfig();
-Leaf\Database::connect();
+Leaf\Database::initDb();
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +56,8 @@ Leaf\Database::connect();
 */
 $console = new \Aloe\Console("Leaf API", "v3.5.0");
 
+$console->register(MigrateCommand::class);
+$console->register(CreateUserCommand::class);
 /*
 |--------------------------------------------------------------------------
 | Configure Aloe
@@ -61,16 +67,6 @@ $console = new \Aloe\Console("Leaf API", "v3.5.0");
 |
 */
 \Aloe\Command\Config::$env = "API";
-
-/*
-|--------------------------------------------------------------------------
-| Add commands
-|--------------------------------------------------------------------------
-|
-| Add custom commands
-|
-*/
-$console->register(\App\Console\ExampleCommand::class);
 
 /*
 |--------------------------------------------------------------------------
