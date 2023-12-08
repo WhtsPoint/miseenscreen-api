@@ -2,10 +2,12 @@
 
 namespace App\Repositories;
 
+use App\Dto\SubscriptionDto;
 use App\Exceptions\SubscriptionAlreadyExistsException;
 use App\Exceptions\SubscriptionNotFoundException;
 use App\Interfaces\SubscriptionRepositoryInterface;
 use App\Models\Subscription;
+use App\Utils\Pagination;
 use Leaf\Db;
 
 class SubscriptionRepository implements SubscriptionRepositoryInterface
@@ -33,14 +35,14 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
     public function isExistsWithEmail(string $email): bool
     {
         return $this->database->query(
-            'SELECT COUNT(*) as count FROM subscription WHERE email = ?'
+            'SELECT COUNT(*) as count FROM subscriptions WHERE email = ?'
         )->bind($email)->fetchAll()[0]['count'] !== 0;
     }
 
     public function isExistsWithId(string $id): bool
     {
         return $this->database->query(
-                'SELECT COUNT(*) as count FROM subscription WHERE id = ?'
+                'SELECT COUNT(*) as count FROM subscriptions WHERE id = ?'
             )->bind($id)->fetchAll()[0]['count'] !== 0;
     }
 
@@ -49,12 +51,28 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
      */
     public function deleteById(string $id): void
     {
-        if ($this->isExistsWithId($id)) {
+        if ($this->isExistsWithId($id) === false) {
             throw new SubscriptionNotFoundException();
         }
 
         $this->database->delete('subscriptions')
             ->where('id', $id)
             ->execute();
+    }
+
+    /**
+     * @return Subscription[]
+     */
+    public function getAll(Pagination $pagination): array
+    {
+        $forms = $this->database->query(
+            'SELECT * FROM subscriptions OFFSET ? LIMIT ?'
+        )->bind($pagination->getFirst(), $pagination->getLast())
+        ->fetchAll();
+
+        return array_map(
+            fn (array $form) => new SubscriptionDto($form['id'], $form['email']),
+            $forms
+        );
     }
 }
