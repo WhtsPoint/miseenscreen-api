@@ -59,7 +59,7 @@ class Validator
     {
         response()->withHeader('Content-Type', 'application/json');
         response()->exit(json_encode([
-            'errors' => $errors
-        ]), 400);
+            'error' => $errors
+        ]), 422);
     }
 }
