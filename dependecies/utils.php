@@ -2,9 +2,11 @@
 
 use App\Interfaces\CallFormFileDeleteInterface;
 use App\Interfaces\CallFormFileUploadInterface;
+use App\Interfaces\ReCaptchaInterface;
 use App\Utils\CallFormFileStorage;
 use App\Utils\FileResponse;
 use App\Utils\FileSerializer;
+use App\Utils\ReCaptcha;
 use App\Utils\Validator;
 use Leaf\Auth;
 use Leaf\Db;
@@ -48,4 +50,8 @@ app()->register(Auth::class, function () {
     );
 
     return $auth;
+});
+
+app()->register(ReCaptchaInterface::class, function () {
+    return new ReCaptcha($_ENV['RECAPTCHA_SECRET_KEY']);
 });

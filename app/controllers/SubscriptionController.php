@@ -2,20 +2,22 @@
 
 namespace App\Controllers;
 
+use App\Dto\SubscriptionCreationDto;
+use App\Exceptions\ReCaptchaIsInvalidException;
 use App\Exceptions\SubscriptionAlreadyExistsException;
 use App\Exceptions\SubscriptionNotFoundException;
 use App\Interfaces\AuthenticationInterface;
 use App\Interfaces\SubscriptionRepositoryInterface;
-use App\Models\Subscription;
+use App\Services\SubscriptionService;
 use App\Utils\Email;
 use App\Utils\Pagination;
 use App\Utils\Validator;
 use Leaf\Controller;
-use Lib\Uuid;
 
 class SubscriptionController extends Controller
 {
     public function __construct(
+        protected SubscriptionService $service,
         protected SubscriptionRepositoryInterface $repository,
         protected Validator $validator,
         protected AuthenticationInterface $authentication
@@ -28,18 +30,21 @@ class SubscriptionController extends Controller
         $body = $this->request->body();
 
         $this->validator->validate([
-            'email' => ['required', 'regex:"' . Email::REGEX . '"']
+            'email' => ['required', 'regex:"' . Email::REGEX . '"'],
+            'token' => ['required']
         ], $body);
 
         try {
-            $this->repository->create(new Subscription(
-                $id = Uuid::v4(),
-                new Email($body['email'])
+            $response = $this->service->subscribe(new SubscriptionCreationDto(
+                $body['token'],
+                $body['email']
             ));
 
-            $this->response->json(['id' => $id]);
+            $this->response->json($response);
         } catch (SubscriptionAlreadyExistsException) {
             $this->response->json(['error' => 'This email is already subscribed'], 400);
+        } catch (ReCaptchaIsInvalidException $e) {
+            $this->response->json(['error' => 'Invalid reCaptcha token'], 400);
         }
     }
 
