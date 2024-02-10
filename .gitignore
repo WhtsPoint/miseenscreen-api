@@ -1,6 +1,6 @@
-.env
-.env.local
+.env.*
 .idea
 composer.lock
 .postgres
 var/storage
+vendor
