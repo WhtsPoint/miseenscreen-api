@@ -8,6 +8,7 @@ use App\Exceptions\CallFormDirNotFound;
 use App\Exceptions\CallFormNotFoundException;
 use App\Exceptions\FileIsAlreadyExistsException;
 use App\Exceptions\FileNotFoundException;
+use App\Exceptions\ReCaptchaIsInvalidException;
 use App\Interfaces\AuthenticationInterface;
 use App\Services\CallFormFileService;
 use App\Services\CallFormService;
@@ -51,7 +52,8 @@ class CallFormController extends Controller
             'employeeNumber' => ['required', 'min:1', 'max:100'],
             'phone' => ['required', 'min:1', 'max:100'],
             'email' => ['required', 'min:1', 'max:100'],
-            'services' => ['services']
+            'services' => ['services'],
+            'token' => ['required']
         ], $body);
 
         $this->validator->validateFiles($files);
@@ -67,13 +69,18 @@ class CallFormController extends Controller
             $body['services']
         );
 
-        $response = $this->service->create($dto);
-        $this->response->json($response);
+        try {
+            $response = $this->service->create($dto, $body['token']);
+
+            $this->response->json($response);
+        } catch (ReCaptchaIsInvalidException) {
+            $this->response->json(['error' => 'Invalid reCaptcha token'], 400);
+        }
     }
 
     public function getAll(): void
     {
-        //$this->authentication->verifyIsLogged();
+        $this->authentication->verifyIsLogged();
         $body = $this->request->urlData();
 
         $this->validator->validate([

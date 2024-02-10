@@ -43,7 +43,7 @@ class SubscriptionController extends Controller
             $this->response->json($response);
         } catch (SubscriptionAlreadyExistsException) {
             $this->response->json(['error' => 'This email is already subscribed'], 400);
-        } catch (ReCaptchaIsInvalidException $e) {
+        } catch (ReCaptchaIsInvalidException) {
             $this->response->json(['error' => 'Invalid reCaptcha token'], 400);
         }
     }

@@ -3,11 +3,13 @@
 namespace Dependencies;
 
 use App\Controllers\CallFormController;
+use App\Exceptions\ReCaptchaIsInvalidException;
 use App\Factories\CallFormFactory;
 use App\Interfaces\AuthenticationInterface;
 use App\Interfaces\CallFormFileDeleteInterface;
 use App\Interfaces\CallFormFileUploadInterface;
 use App\Interfaces\CallFormRepositoryInterface;
+use App\Interfaces\ReCaptchaInterface;
 use App\Repositories\CallFormRepository;
 use App\Services\CallFormFileService;
 use App\Services\CallFormService;
@@ -44,7 +46,8 @@ app()->register(CallFormService::class, function () {
         app()->{CallFormRepositoryInterface::class},
         app()->{CallFormFileUploadInterface::class . '&' . CallFormFileDeleteInterface::class},
         app()->{CallFormFactory::class},
-        app()->{CallFormSerializer::class}
+        app()->{CallFormSerializer::class},
+        app()->{ReCaptchaInterface::class}
     );
 });
 
