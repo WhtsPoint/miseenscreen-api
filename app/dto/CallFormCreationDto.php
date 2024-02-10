@@ -2,8 +2,6 @@
 
 namespace App\Dto;
 
-use App\Utils\Phone;
-
 class CallFormCreationDto
 {
     public function __construct(
@@ -14,6 +12,8 @@ class CallFormCreationDto
         public string $phone,
         public string $email,
         /** @var FileDto[] */
-        public array $files
+        public array $files,
+        /** @var string[] */
+        public ?array $services = null
     ) {}
 }

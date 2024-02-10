@@ -11,11 +11,18 @@ use App\Interfaces\CallFormRepositoryInterface;
 use App\Repositories\CallFormRepository;
 use App\Services\CallFormFileService;
 use App\Services\CallFormService;
+use App\Utils\CallFormFileStorage;
 use App\Utils\CallFormSerializer;
 use App\Utils\FileResponse;
 use App\Utils\FileSerializer;
 use App\Utils\Validator;
 use Leaf\Db;
+
+app()->register(CallFormFileUploadInterface::class . '&' . CallFormFileDeleteInterface::class, function () {
+    return new CallFormFileStorage(
+        app()->{'file_storage_path'}
+    );
+});
 
 app()->register(CallFormSerializer::class, function () {
     return new CallFormSerializer();

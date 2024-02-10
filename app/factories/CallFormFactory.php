@@ -9,6 +9,7 @@ use App\Interfaces\CallFormFileUploadInterface;
 use App\Models\CallForm;
 use App\Utils\Email;
 use App\Utils\Phone;
+use App\Utils\Services;
 use Lib\Uuid;
 
 class CallFormFactory
@@ -26,9 +27,13 @@ class CallFormFactory
             $dto->fullName,
             $dto->companyName,
             $dto->employeeNumber,
-            new Phone($dto->phone),
-            new Email($dto->email)
+            $dto->phone,
+            $dto->email
         );
+
+        if ($dto->services !== null) {
+            $form->setServices(new Services($dto->services));
+        }
 
         foreach ($dto->files as $file) {
             $form->addFile($file, $storage);

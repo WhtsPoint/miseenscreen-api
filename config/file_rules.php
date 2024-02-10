@@ -1,7 +1,7 @@
 <?php
 
 return [
-    "maxSize" => 625000,
+    "maxSize" => 3 * 10 ** 6,
     "approvedFormats" => [
         'text/plain',
         'image/png',

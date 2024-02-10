@@ -22,7 +22,8 @@ class CallFormRepository implements CallFormRepositoryInterface
             ->insert('call_forms')
             ->params([
                 ...$this->serializer->toArray($form),
-                'files' => json_encode($form->getFiles())
+                'files' => json_encode($form->getFiles()),
+                'services' => json_encode($form->getServices()->get())
             ])->execute();
     }
 

@@ -41,16 +41,17 @@ class CallFormController extends Controller
         $body = $this->request->body();
 
         $files = $this->fileSerializer->toCorrectFormat(
-            $this->request->files()['files'] ?? []
+            @$this->request->files()['files'] ?: []
         );
 
         $this->validator->validate([
-            'comment' => ['required', 'min:3'],
-            'fullName' => ['required', 'min:3'],
-            'companyName' => ['required', 'min:3'],
-            'employeeNumber' => ['required', 'number'],
-            'phone' => ['required', 'regex:"' . Phone::REGEX . '"'],
-            'email' => ['required', 'regex:"' . Email::REGEX . '"']
+            'comment' => ['required', 'min:1', 'max:3000'],
+            'fullName' => ['required', 'min:3', 'max:100'],
+            'companyName' => ['required', 'min:3', 'max:100'],
+            'employeeNumber' => ['required', 'min:1', 'max:100'],
+            'phone' => ['required', 'min:1', 'max:100'],
+            'email' => ['required', 'min:1', 'max:100'],
+            'services' => ['services']
         ], $body);
 
         $this->validator->validateFiles($files);
@@ -62,7 +63,8 @@ class CallFormController extends Controller
             (int) $body['employeeNumber'],
             $body['phone'],
             $body['email'],
-            $files
+            $files,
+            $body['services']
         );
 
         $response = $this->service->create($dto);
@@ -71,7 +73,7 @@ class CallFormController extends Controller
 
     public function getAll(): void
     {
-        $this->authentication->verifyIsLogged();
+        //$this->authentication->verifyIsLogged();
         $body = $this->request->urlData();
 
         $this->validator->validate([
@@ -84,9 +86,6 @@ class CallFormController extends Controller
         $this->response->json($response);
     }
 
-    /**
-     * @throws CallFormDirNotFound
-     */
     public function deleteById(string $id): void
     {
         $this->authentication->verifyIsLogged();

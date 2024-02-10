@@ -8,12 +8,13 @@ use Leaf\Form;
 class Validator
 {
     public function __construct(
+        protected FormFactory $factory,
         protected array $fileRules
     ) {}
 
     public function validate(array $rules, array $data): void
     {
-        $form = new Form();
+        $form = $this->factory->create();
 
         $isValid = $form::validate($data, $rules);
 

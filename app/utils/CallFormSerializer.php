@@ -15,9 +15,12 @@ class CallFormSerializer
             $formParams['full_name'],
             $formParams['company_name'],
             $formParams['employee_number'],
-            new Phone($formParams['phone']),
-            new Email($formParams['email']),
-            json_decode($formParams['files'])
+            $formParams['phone'],
+            $formParams['email'],
+            json_decode($formParams['files']),
+            new Services(
+                $formParams['services'] ? json_decode($formParams['services']) : []
+            )
         );
     }
 
@@ -31,7 +34,8 @@ class CallFormSerializer
             $form->getEmployeeNumber(),
             $form->getPhone(),
             $form->getEmail(),
-            $form->getFiles()
+            $form->getFiles(),
+            $form->getServices()->get()
         );
     }
 
@@ -43,9 +47,10 @@ class CallFormSerializer
             'full_name' => $form->getFullName(),
             'company_name' => $form->getCompanyName(),
             'files' => $form->getFiles(),
-            'phone' => $form->getPhone()->get(),
+            'phone' => $form->getPhone(),
             'employee_number' => $form->getEmployeeNumber(),
-            'email' => $form->getEmail()->get()
+            'email' => $form->getEmail(),
+            'services' => $form->getServices()
         ];
     }
 }

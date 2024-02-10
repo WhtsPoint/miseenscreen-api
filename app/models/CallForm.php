@@ -9,18 +9,24 @@ use App\Interfaces\CallFormFileDeleteInterface;
 use App\Interfaces\CallFormFileUploadInterface;
 use App\Utils\Email;
 use App\Utils\Phone;
+use App\Utils\Services;
 
 class CallForm {
+    private Services $services;
+
     public function __construct(
         private readonly string $id,
         private string $comment,
         private string $fullName,
         private string $companyName,
         private int $employeeNumber,
-        private Phone $phone,
-        private Email $email,
-        private array $files = []
-    ) {}
+        private string $phone,
+        private string $email,
+        private array $files = [],
+        ?Services $services = null
+    ) {
+        $this->services = $services ?: new Services([]);
+    }
 
     public function getId(): string
     {
@@ -42,7 +48,7 @@ class CallForm {
         return $this->companyName;
     }
 
-    public function getPhone(): Phone
+    public function getPhone(): string
     {
         return $this->phone;
     }
@@ -52,7 +58,7 @@ class CallForm {
         return $this->employeeNumber;
     }
 
-    public function getEmail(): Email
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -60,6 +66,16 @@ class CallForm {
     public function getFiles(): array
     {
         return $this->files;
+    }
+
+    public function setServices(Services $services): void
+    {
+        $this->services = $services;
+    }
+
+    public function getServices(): Services
+    {
+        return $this->services;
     }
 
     /**

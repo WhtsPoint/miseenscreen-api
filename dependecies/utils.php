@@ -1,11 +1,9 @@
 <?php
 
-use App\Interfaces\CallFormFileDeleteInterface;
-use App\Interfaces\CallFormFileUploadInterface;
 use App\Interfaces\ReCaptchaInterface;
-use App\Utils\CallFormFileStorage;
 use App\Utils\FileResponse;
 use App\Utils\FileSerializer;
+use App\Utils\FormFactory;
 use App\Utils\ReCaptcha;
 use App\Utils\Validator;
 use Leaf\Auth;
@@ -24,13 +22,8 @@ app()->register('file_rules', function () use ($fileRules) {
 
 app()->register(Validator::class, function () {
     return new Validator(
+        new FormFactory(),
         app()->{'file_rules'}
-    );
-});
-
-app()->register(CallFormFileUploadInterface::class . '&' . CallFormFileDeleteInterface::class, function () {
-    return new CallFormFileStorage(
-        app()->{'file_storage_path'}
     );
 });
 

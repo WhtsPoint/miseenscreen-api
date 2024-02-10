@@ -13,7 +13,9 @@ class FileSerializer
     {
         $result = [];
 
-        foreach (array_keys(@$files['name'] ?? []) as $i) {
+        if (gettype(@$files['name']) !== 'array') return [];
+
+        foreach (array_keys(@$files['name'] ?: []) as $i) {
             $result []= new FileDto(
                 $files['name'][$i],
                 $files['full_path'][$i],
