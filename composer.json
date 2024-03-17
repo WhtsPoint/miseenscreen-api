@@ -1,91 +1,78 @@
 {
-    "name": "leafs/api",
-    "description": "A lightweight PHP MVC framework for rapid API development.",
-    "type": "library",
-    "keywords": [
-        "framework",
-        "leaf",
-        "leafPHP",
-        "mvc",
-        "leaf api",
-        "api"
-    ],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Michael Darko",
-            "email": "mickdd22@gmail.com",
-            "homepage": "https://mychi.netlify.app",
-            "role": "Maintainer"
-        }
-    ],
+    "type": "project",
+    "license": "proprietary",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
     "require": {
-        "leafs/aloe": "dev-master",
-        "illuminate/console": "^8.75",
-        "leafs/blade": "*",
-        "leafs/mvc-core": "dev-main",
-        "leafs/leaf": "^3.3",
-        "leafs/logger": "*",
-        "leafs/cors": "*",
-        "leafs/auth": "*",
-        "leafs/db": "*",
-        "ext-pdo": "*",
-      "ext-fileinfo": "*"
+        "php": ">=8.1",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
+        "doctrine/dbal": "^3",
+        "doctrine/doctrine-bundle": "^2.11",
+        "doctrine/doctrine-migrations-bundle": "^3.3",
+        "doctrine/orm": "^3.1",
+        "lexik/jwt-authentication-bundle": "^2.20",
+        "phpdocumentor/reflection-docblock": "^5.3",
+        "phpstan/phpdoc-parser": "^1.26",
+        "symfony/console": "6.4.*",
+        "symfony/dotenv": "6.4.*",
+        "symfony/flex": "^2",
+        "symfony/framework-bundle": "6.4.*",
+        "symfony/mime": "^6.4",
+        "symfony/property-access": "6.4.*",
+        "symfony/property-info": "6.4.*",
+        "symfony/runtime": "6.4.*",
+        "symfony/serializer": "6.4.*",
+        "symfony/uid": "6.4.*",
+        "symfony/validator": "6.4.*",
+        "symfony/yaml": "6.4.*"
     },
-    "require-dev": {
-        "fakerphp/faker": "^1.16"
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true,
+            "symfony/flex": true,
+            "symfony/runtime": true
+        },
+        "sort-packages": true
     },
     "autoload": {
         "psr-4": {
-            "Lib\\": "lib/",
-            "App\\": "app/",
-            "Tests\\": "tests/",
-            "Config\\": "config/",
-            "App\\Http\\": "app/http/",
-            "App\\Jobs\\": "app/jobs/",
-            "App\\Lang\\": "app/lang/",
-            "App\\Mail\\": "app/mail/",
-            "App\\Views\\": "app/views/",
-            "App\\Utils\\": "app/utils/",
-            "App\\Events\\": "app/events/",
-            "App\\Models\\": "app/models/",
-            "App\\Workers\\": "app/workers/",
-            "App\\Console\\": "app/console/",
-            "App\\Scripts\\": "app/scripts/",
-            "App\\Helpers\\": "app/helpers/",
-            "App\\Channels\\": "app/channels/",
-            "App\\Services\\": "app/services/",
-            "App\\Middleware\\": "app/middleware/",
-            "App\\Components\\": "app/components/",
-            "App\\Controllers\\": "app/controllers/",
-            "App\\Notifications\\": "app/notifications/",
-            "App\\Database\\Seeds\\": "app/database/seeds/",
-            "App\\Database\\Schema\\": "app/database/schema/",
-            "App\\Factories\\": "app/factories/",
-            "App\\Exceptions\\": "app/exceptions",
-            "App\\Repositories\\": "app/repositories",
-            "App\\Interfaces\\": "app/interfaces",
-            "App\\Traits\\": "app/traits",
-            "App\\Dto\\": "app/dto",
-            "App\\Migrations\\": "migrations"
+            "App\\": "src/"
         }
     },
-    "config": {
-        "optimize-autoloader": true,
-        "sort-packages": false,
-        "allow-plugins": {
-            "pestphp/pest-plugin": true
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
         }
+    },
+    "replace": {
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php72": "*",
+        "symfony/polyfill-php73": "*",
+        "symfony/polyfill-php74": "*",
+        "symfony/polyfill-php80": "*",
+        "symfony/polyfill-php81": "*"
     },
     "scripts": {
-        "post-root-package-install": [
-            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
-            "@php -r \"unlink('README.MD'); rename('README2.MD', 'README.MD');\""
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        },
+        "post-install-cmd": [
+            "@auto-scripts"
         ],
-        "post-create-project-cmd": [
-            "@php leaf key:generate"
+        "post-update-cmd": [
+            "@auto-scripts"
         ]
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    "conflict": {
+        "symfony/symfony": "*"
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "6.4.*"
+        }
+    }
 }

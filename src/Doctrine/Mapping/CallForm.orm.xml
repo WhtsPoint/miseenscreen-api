@@ -1,0 +1,13 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping">
+    <entity name="App\Model\CallForm">
+        <id name="id" column="id" />
+        <field name="comment" column="comment" />
+        <field name="fullName" column="fullName" />
+        <field name="companyName" column="companyName" />
+        <field name="employeeNumber" column="employeeNumber" />
+        <field name="phone" column="phone" />
+        <field name="email" column="email" />
+        <field name="files" type="json" column="files" />
+        <field name="services" type="services" column="services" nullable="true" />
+    </entity>
+</doctrine-mapping>

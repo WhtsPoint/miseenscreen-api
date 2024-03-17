@@ -1,0 +1,9 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+jwt_login:
+    path: '%jwt_login_path%'
+    methods: [GET]

@@ -1,0 +1,26 @@
+parameters:
+    call_form_storage: '%kernel.project_dir%/.storage'
+    jwt_login_path: '/api/v0/login'
+    admin_login: '%env(ADMIN_LOGIN)%'
+    admin_password: '%env(ADMIN_PASSWORD)%'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Model/'
+            - '../src/Kernel.php'
+    App\Utils\ReCaptcha:
+        arguments:
+            - '%env(RECAPTCHA_SECRET_KEY)%'
+    App\Utils\CallFormFileStorage:
+        arguments:
+            - '%call_form_storage%'
+    App\Service\CallFormFileService:
+        arguments:
+            $storagePath: '%call_form_storage%'
