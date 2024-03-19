@@ -5,6 +5,7 @@ namespace App\Dto;
 use App\Utils\Services;
 use Symfony\Component\Validator\Constraints\All;
 use Symfony\Component\Validator\Constraints\Choice;
+use Symfony\Component\Validator\Constraints\Count;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Unique;
@@ -28,6 +29,7 @@ class CallFormDto
         #[Unique]
         #[All([new Choice(Services::VALUES)])]
         public ?array $services = null,
+        #[Count(max: 10)]
         #[All([new File(
             maxSize: '3M',
             extensions: [

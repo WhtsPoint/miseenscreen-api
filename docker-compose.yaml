@@ -1,0 +1,30 @@
+services:
+  db:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - ./.mysql/data:/var/lib/mysql
+    networks:
+      - api-miseenscreen
+  php-fpm:
+    build: .
+    environment:
+      - DATABASE_URL=mysql://root:root@db:3306/app
+    volumes:
+      - ./.symfony/jwt:/var/www/html/config/jwt
+    networks:
+      - api-miseenscreen
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - .:/var/www/html
+    ports:
+      - 80:80
+    networks:
+      - api-miseenscreen
+networks:
+  api-miseenscreen:
+    name: miseenscreen
+    external: true

@@ -1,0 +1,12 @@
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+
+/config/jwt/*.pem
+
+.idea
+.mysql
+.storage
+
+composer.lock

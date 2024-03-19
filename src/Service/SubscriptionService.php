@@ -22,9 +22,9 @@ class SubscriptionService {
      * @throws SubscriptionAlreadyExistsException
      */
     public function subscribe(SubscriptionCreationDto $dto): SubscriptionResultDto {
-//        if ($this->reCaptcha->isTokenValid($dto->token) === false) {
-//            throw new ReCaptchaIsInvalidException();
-//        }
+        if ($this->reCaptcha->isTokenValid($dto->token) === false) {
+            throw new ReCaptchaIsInvalidException();
+        }
 
         if ($this->repository->isExistsWithEmail($dto->email)) {
             throw new SubscriptionAlreadyExistsException();

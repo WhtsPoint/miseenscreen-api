@@ -2,8 +2,6 @@
 
 namespace App\Model;
 
-use App\Dto\FileDto;
-use App\Dto\UploadFileDto;
 use App\Exception\FileIsAlreadyExistsException;
 use App\Interface\CallFormFileDeleteInterface;
 use App\Interface\CallFormFileUploadInterface;
@@ -19,7 +17,7 @@ class CallForm {
         private string $comment,
         private string $fullName,
         private string $companyName,
-        private int $employeeNumber,
+        private string $employeeNumber,
         private string $phone,
         private string $email,
         private array $files = [],
@@ -54,7 +52,7 @@ class CallForm {
         return $this->phone;
     }
 
-    public function getEmployeeNumber(): int
+    public function getEmployeeNumber(): string
     {
         return $this->employeeNumber;
     }

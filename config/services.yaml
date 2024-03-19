@@ -24,3 +24,6 @@ services:
     App\Service\CallFormFileService:
         arguments:
             $storagePath: '%call_form_storage%'
+    App\Utils\Http\EventListener\InternalExceptionListener:
+        arguments:
+            - '%kernel.environment%'

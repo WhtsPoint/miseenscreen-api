@@ -32,7 +32,7 @@ class CallFormFactory
             $form->setServices(new Services($dto->services));
         }
 
-        foreach ($dto->files as $file) {
+        foreach ($dto->files ?: [] as $file) {
             $form->addFile($file, $storage);
         }
 
