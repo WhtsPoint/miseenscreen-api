@@ -12,7 +12,7 @@ RUN chown -R www-data:www-data /var/www/html
 USER www-data
 WORKDIR /var/www/html
 
-ENV APP_ENV=dev
+ENV APP_ENV=prod
 
 RUN composer i --no-dev --no-scripts
 
