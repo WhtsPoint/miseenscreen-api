@@ -25,15 +25,17 @@ class Services implements ValueObjectInterface
      */
     public function __construct(array $values)
     {
-        if (count(array_diff($values, self::VALUES)) !== 0) {
+        $valuesList = array_values($values);
+
+        if (count(array_diff($valuesList, self::VALUES)) !== 0) {
             throw new InvalidArgumentException('Invalid services');
         }
 
-        if (count(array_unique($values)) !== count($values)) {
+        if (count(array_unique($valuesList)) !== count($valuesList)) {
             throw new InvalidArgumentException('Duplicate services');
         }
 
-        $this->values = $values;
+        $this->values = $valuesList;
     }
 
     /**
