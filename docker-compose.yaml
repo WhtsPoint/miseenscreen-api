@@ -13,6 +13,7 @@ services:
       - DATABASE_URL=mysql://root:root@db:3306/app
     volumes:
       - ./.symfony/jwt:/var/www/html/config/jwt
+      - ./.storage:/var/www/html/.storage
     networks:
       - api-miseenscreen
   nginx:

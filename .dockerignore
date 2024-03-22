@@ -8,5 +8,10 @@
 .idea
 .mysql
 .storage
+.git
+.gitignore
+docker-compose*.yaml
+logo.png
+README.md
 
 composer.lock

@@ -34,10 +34,7 @@
     ```
 - Change docker volumes owner
    ```sh 
-  docker exec 
-  -u root
-  -it <fpm_container>
-  chown www-data:www-data /var/www/html/config/jwt
+  docker exec -u root -it <fpm_container> chown www-data:www-data /var/www/html/config/jwt /var/www/html/.storage
     ```
 
 - Exec fpm container via
