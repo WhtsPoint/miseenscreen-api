@@ -8,7 +8,7 @@ use App\Utils\Http\JsonErrorResponse;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
-#[AsEventListener(event: 'kernel.exception')]
+#[AsEventListener(event: 'kernel.exception', priority: 11)]
 class ValidationExceptionListener
 {
     public function onKernelException(ExceptionEvent $event): void

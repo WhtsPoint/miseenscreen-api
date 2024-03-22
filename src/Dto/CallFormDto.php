@@ -33,9 +33,9 @@ class CallFormDto
         #[All([new File(
             maxSize: '3M',
             extensions: [
-                'txt' => ['text/plain'],
-                'png' => ['image/png'],
-                'jpeg' => ['image/jpeg'],
+                'txt',
+                'png',
+                'jpeg',
                 'pdf' => ['application/pdf'],
                 'docx' => ['application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
                 'doc' => ['application/msword']

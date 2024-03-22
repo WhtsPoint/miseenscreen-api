@@ -20,7 +20,7 @@ class InternalExceptionListener
         $exception = $event->getThrowable();
 
         if ($exception instanceof HttpException === false && $this->kernelEnv === 'prod') {
-            $this->logger->error($exception->getMessage());
+            $this->logger->error($exception);
             $event->setThrowable(new HttpException(500, 'Internal server error'));
         }
     }
