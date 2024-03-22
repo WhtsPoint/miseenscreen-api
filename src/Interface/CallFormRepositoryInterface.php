@@ -4,16 +4,14 @@ namespace App\Interface;
 
 use App\Exception\CallFormNotFoundException;
 use App\Model\CallForm;
+use App\Utils\PaginatedCallForms;
 use App\Utils\Pagination;
 
 interface CallFormRepositoryInterface
 {
     public function create(CallForm $form): void;
 
-    /**
-     * @return CallForm[]
-     */
-    public function getAll(Pagination $pagination): array;
+    public function getAll(Pagination $pagination): PaginatedCallForms;
 
     /**
      * @throws CallFormNotFoundException

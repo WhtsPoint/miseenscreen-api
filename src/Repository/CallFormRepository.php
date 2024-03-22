@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Exception\CallFormNotFoundException;
 use App\Interface\CallFormRepositoryInterface;
 use App\Model\CallForm;
+use App\Utils\PaginatedCallForms;
 use App\Utils\Pagination;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -39,15 +40,17 @@ class CallFormRepository implements CallFormRepositoryInterface
         return $form;
     }
 
-    /**
-     * @return CallForm[]
-     */
-    public function getAll(Pagination $pagination): array
+    public function getAll(Pagination $pagination): PaginatedCallForms
     {
-        return $this->entityManager->createQuery('SELECT f FROM App\Model\CallForm f')
+        $formsCount = $this->entityManager->createQuery('SELECT COUNT(f.id) FROM App\Model\CallForm f')
+            ->getSingleScalarResult();
+        $forms = $this->entityManager->createQuery('SELECT f FROM App\Model\CallForm f')
             ->setFirstResult($pagination->getFirst())
-            ->setMaxResults($pagination->getLast())
+            ->setMaxResults($pagination->getCount())
             ->execute();
+
+
+        return new PaginatedCallForms($forms, ceil($formsCount / $pagination->getCount()));
     }
 
     /**

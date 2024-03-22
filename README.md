@@ -9,6 +9,11 @@
    ```sh 
   composer i
     ````
+  
+- Run docker containers
+  ```sh
+  docker compose -f docker-compose.dev.yaml up -d
+  ```
 
 - [Make Migrations](#migrations)
 - [Generate JWT Keys](#migrations)

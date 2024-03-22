@@ -6,6 +6,7 @@ use App\Exception\SubscriptionNotFoundException;
 use App\Interface\SubscriptionRepositoryInterface;
 use App\Model\Subscription;
 use App\Utils\Email;
+use App\Utils\PaginatedSubscriptions;
 use App\Utils\Pagination;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -49,14 +50,15 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
             ->execute(['id' => $id]);
     }
 
-    /**
-     * @return Subscription[]
-     */
-    public function getAll(Pagination $pagination): array
+    public function getAll(Pagination $pagination): PaginatedSubscriptions
     {
-        return $this->entityManager->createQuery('SELECT s FROM App\Model\Subscription s')
+        $pageCount = $this->entityManager->createQuery('SELECT COUNT(s.id) FROM App\Model\Subscription s')
+            ->getSingleScalarResult();
+        $subscriptions = $this->entityManager->createQuery('SELECT s FROM App\Model\Subscription s')
             ->setFirstResult($pagination->getFirst())
-            ->setMaxResults($pagination->getLast())
+            ->setMaxResults($pagination->getCount())
             ->execute();
+
+        return new PaginatedSubscriptions($subscriptions, ceil($pageCount / $pagination->getCount()));
     }
 }

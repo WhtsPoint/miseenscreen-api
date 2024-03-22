@@ -1,11 +1,9 @@
 services:
-  postgres:
-    container_name: postgres
-    image: postgres:latest
+  db:
+    image: mysql:latest
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
-    ports:
-      - 5400:5432
+      - MYSQL_ROOT_PASSWORD=root
     volumes:
-      - .postgres:/var/lib/postgresql/data
+      - ./.mysql/data:/var/lib/mysql
+    ports:
+      - 3306:3306

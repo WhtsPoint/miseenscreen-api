@@ -6,4 +6,4 @@ controllers:
 
 jwt_login:
     path: '%jwt_login_path%'
-    methods: [GET]
+    methods: [POST]
