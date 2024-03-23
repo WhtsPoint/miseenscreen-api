@@ -21,11 +21,23 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       - .:/var/www/html
+      - ./certbot/www/:/var/www/certbot/:ro
     ports:
       - 80:80
     networks:
       - api-miseenscreen
+      - nginx-network
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
+    networks:
+      - nginx-network
+
 networks:
   api-miseenscreen:
     name: miseenscreen
     external: true
+  nginx-network:
+    driver: bridge
