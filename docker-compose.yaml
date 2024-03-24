@@ -13,7 +13,7 @@ services:
       - DATABASE_URL=mysql://root:root@db:3306/app
     volumes:
       - ./.symfony/jwt:/var/www/html/config/jwt
-      - ./.storage:/var/www/html/.storage
+      - ./.storage:/var/www/html/.storage  
     networks:
       - api-miseenscreen
   nginx:
@@ -21,23 +21,16 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       - .:/var/www/html
-      - ./certbot/www/:/var/www/certbot/:ro
+      - ./.certbot/conf:/etc/nginx/certbot
+    environment:
+      - PROJECT_DOMAIN=miseenscreee.com
     ports:
       - 80:80
+      - 443:443 
     networks:
       - api-miseenscreen
-      - nginx-network
-  certbot:
-    image: certbot/certbot
-    volumes:
-      - ./certbot/www/:/var/www/certbot/:rw
-      - ./certbot/conf/:/etc/letsencrypt/:rw
-    networks:
-      - nginx-network
 
 networks:
   api-miseenscreen:
     name: miseenscreen
     external: true
-  nginx-network:
-    driver: bridge

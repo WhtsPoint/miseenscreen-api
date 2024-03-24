@@ -16,5 +16,6 @@
 .mysql
 .storage
 .symfony
+.certbot
 
 composer.lock
