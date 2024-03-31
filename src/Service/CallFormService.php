@@ -4,14 +4,19 @@ namespace App\Service;
 
 use App\Dto\CallFormCreationResultDto;
 use App\Dto\CallFormDto;
+use App\Dto\CallFormUpdateStatusDto;
 use App\Exception\CallFormNotFoundException;
 use App\Exception\FileIsAlreadyExistsException;
 use App\Exception\ReCaptchaIsInvalidException;
+use App\Exception\ThisStatusAlreadySetException;
 use App\Factory\CallFormFactory;
 use App\Interface\CallFormFileDeleteInterface;
 use App\Interface\CallFormFileUploadInterface;
 use App\Interface\CallFormRepositoryInterface;
+use App\Interface\FlusherInterface;
 use App\Interface\ReCaptchaInterface;
+use App\Utils\FormStatus;
+use DateTimeImmutable;
 
 class CallFormService
 {
@@ -19,20 +24,21 @@ class CallFormService
         protected CallFormRepositoryInterface $repository,
         protected CallFormFileUploadInterface&CallFormFileDeleteInterface $storage,
         protected CallFormFactory $factory,
-        protected ReCaptchaInterface $reCaptcha
+        protected ReCaptchaInterface $reCaptcha,
+        public FlusherInterface $flusher
     ) {}
 
     /**
      * @throws FileIsAlreadyExistsException
      * @throws ReCaptchaIsInvalidException
      */
-    public function create(CallFormDto $dto): CallFormCreationResultDto
+    public function create(CallFormDto $dto, string $token): CallFormCreationResultDto
     {
-        if ($this->reCaptcha->isTokenValid($dto->token) === false) {
+        if ($this->reCaptcha->isTokenValid($token) === false) {
             throw new ReCaptchaIsInvalidException();
         }
 
-        $form = $this->factory->create($dto, $this->storage);
+        $form = $this->factory->create($dto, $this->storage, new DateTimeImmutable());
         $this->repository->create($form);
 
         return new CallFormCreationResultDto($form->getId());
@@ -47,5 +53,18 @@ class CallFormService
 
         $form->removeAllFiles($this->storage);
         $this->repository->deleteById($id);
+    }
+
+    /**
+     * @throws CallFormNotFoundException
+     * @throws ThisStatusAlreadySetException
+     */
+    public function update(FormStatus $status, string $id): void
+    {
+        $callForm = $this->repository->getById($id);
+
+        $callForm->setStatus($status);
+
+        $this->flusher->flush();
     }
 }

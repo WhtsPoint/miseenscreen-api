@@ -11,13 +11,11 @@ class TypeErrorsSerializer implements TypeErrorsSerializerInterface
      */
     public function convertErrorsForResponse(array $arguments, array $errors): array
     {
-        $isUnknown = fn (array $types) => count($types) === 1 && $types[0] === 'unknown';
-
         return array_reduce(
             $errors,
             fn ($prev, $error) => [$error->getFieldName() =>
                     sprintf(
-                        $isUnknown($error->getExpectedTypes()) ?
+                        $this->isUnknown($this->filterTypes($error->getExpectedTypes())) ?
                             'Invalid value type' :
                             'Invalid value type, %s instead of %s',
                         gettype(@$arguments[$error->getFieldName()]),
@@ -26,5 +24,19 @@ class TypeErrorsSerializer implements TypeErrorsSerializerInterface
                 ] + $prev,
             []
         );
+    }
+
+    private function isUnknown(array $types): bool
+    {
+        if (count($types) === 0) return true;
+
+        if (count($types) === 1 && $types[0] === 'unknown') return true;
+
+        return false;
+    }
+
+    private function filterTypes(array $types): array
+    {
+        return array_filter($types, fn ($type) => !class_exists($type));
     }
 }

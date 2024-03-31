@@ -8,6 +8,8 @@
         <field type="text" name="phone" column="phone" />
         <field type="text" name="email" column="email" />
         <field name="files" type="json" column="files" />
+        <field name="postedAt" type="datetime_immutable" nullable="true" />
         <field name="services" type="services" column="services" nullable="true" />
+        <field name="status" type="formStatus" nullable="true" />
     </entity>
 </doctrine-mapping>

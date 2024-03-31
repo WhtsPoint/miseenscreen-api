@@ -3,11 +3,13 @@
 namespace App\Model;
 
 use App\Utils\Email;
+use DateTimeImmutable;
 use Symfony\Component\Uid\Uuid;
 
 class Subscription
 {
-    private readonly string $id;
+    private string $id;
+    private ?DateTimeImmutable $postedAt;
 
     public function __construct(
         private Email $email
@@ -23,5 +25,15 @@ class Subscription
     public function getEmail(): Email
     {
         return $this->email;
+    }
+
+    public function getPostedAt(): ?DateTimeImmutable
+    {
+        return $this->postedAt;
+    }
+
+    public function setPostedAt(DateTimeImmutable $postedAt): void
+    {
+        $this->postedAt = $postedAt;
     }
 }

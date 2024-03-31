@@ -2,22 +2,24 @@
 
 namespace App\Factory;
 
-use App\Dto\CallFormCreationDto;
 use App\Dto\CallFormDto;
 use App\Exception\FileIsAlreadyExistsException;
+use App\Exception\ThisStatusAlreadySetException;
 use App\Interface\CallFormFileUploadInterface;
 use App\Model\CallForm;
 use App\Utils\Services;
-use Symfony\Component\Uid\Uuid;
+use DateTimeImmutable;
 
 class CallFormFactory
 {
     /**
      * @throws FileIsAlreadyExistsException
+     * @throws ThisStatusAlreadySetException
      */
     public function create(
         CallFormDto $dto,
-        CallFormFileUploadInterface $storage
+        CallFormFileUploadInterface $storage,
+        ?DateTimeImmutable $postedAt = null
     ): CallForm {
         $form = new CallForm(
             $dto->comment,
@@ -25,8 +27,10 @@ class CallFormFactory
             $dto->companyName,
             $dto->employeeNumber,
             $dto->phone,
-            $dto->email
+            $dto->email,
         );
+
+        $form->setStatus($dto->status);
 
         if ($dto->services !== null) {
             $form->setServices(new Services($dto->services));

@@ -12,6 +12,7 @@ doctrine:
         types:
             email: App\Doctrine\Type\EmailType
             services: App\Doctrine\Type\ServicesType
+            formStatus: App\Doctrine\Type\FormStatusType
     orm:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true

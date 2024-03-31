@@ -3,14 +3,20 @@
 namespace App\Model;
 
 use App\Exception\FileIsAlreadyExistsException;
+use App\Exception\ThisStatusAlreadySetException;
 use App\Interface\CallFormFileDeleteInterface;
 use App\Interface\CallFormFileUploadInterface;
+use App\Utils\FormStatus;
 use App\Utils\Services;
+use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Uid\Uuid;
 
 class CallForm {
     private Services $services;
+    private array $files = [];
+    private ?DateTimeImmutable $postedAt = null;
+    private ?FormStatus $status = null;
     private string $id;
 
     public function __construct(
@@ -20,11 +26,9 @@ class CallForm {
         private string $employeeNumber,
         private string $phone,
         private string $email,
-        private array $files = [],
-        ?Services $services = null
     ) {
+        $this->services = new Services([]);
         $this->id = (string) Uuid::v4();
-        $this->services = $services ?: new Services([]);
     }
 
     public function getId(): string
@@ -95,5 +99,32 @@ class CallForm {
         $storage->deleteAll($this->getId());
 
         $this->files = [];
+    }
+
+    public function getPostedAt(): ?DateTimeImmutable
+    {
+        return $this->postedAt;
+    }
+
+    public function setPostedAt(DateTimeImmutable $postedAt): void
+    {
+        $this->postedAt = $postedAt;
+    }
+
+    public function getStatus(): ?FormStatus
+    {
+        return $this->status;
+    }
+
+    /**
+     * @throws ThisStatusAlreadySetException
+     */
+    public function setStatus(FormStatus $status): void
+    {
+        if ($this->status !== null && $this->status->get() === $status->get()) {
+            throw new ThisStatusAlreadySetException();
+        }
+
+        $this->status = $status;
     }
 }

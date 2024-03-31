@@ -2,5 +2,6 @@
     <entity name="App\Model\Subscription">
         <id name="id" column="id" />
         <field name="email" type="email" unique="true" column="email" />
+        <field name="postedAt" type="datetime_immutable" nullable="true" />
     </entity>
 </doctrine-mapping>

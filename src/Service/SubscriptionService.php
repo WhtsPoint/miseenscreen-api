@@ -10,6 +10,7 @@ use App\Interface\ReCaptchaInterface;
 use App\Interface\SubscriptionRepositoryInterface;
 use App\Model\Subscription;
 use App\Utils\Email;
+use DateTimeImmutable;
 
 class SubscriptionService {
     public function __construct(
@@ -31,6 +32,8 @@ class SubscriptionService {
         }
 
         $subscription = new Subscription(new Email($dto->email));
+        $subscription->setPostedAt(new DateTimeImmutable());
+
         $this->repository->create($subscription);
 
         return new SubscriptionResultDto($subscription->getId());
