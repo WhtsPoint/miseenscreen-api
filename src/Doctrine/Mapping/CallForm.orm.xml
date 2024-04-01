@@ -11,5 +11,6 @@
         <field name="postedAt" type="datetime_immutable" nullable="true" />
         <field name="services" type="services" column="services" nullable="true" />
         <field name="status" type="formStatus" nullable="true" />
+        <field type="text" name="adminComment" nullable="true" />
     </entity>
 </doctrine-mapping>

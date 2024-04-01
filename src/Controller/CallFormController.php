@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Dto\CallFormCreationDto;
 use App\Dto\CallFormDto;
 use App\Dto\CallFormGetFileDto;
+use App\Dto\CallFormPrimitiveUpdateDto;
 use App\Dto\CallFormUpdateDto;
 use App\Dto\PaginationDto;
 use App\Exception\CallFormNotFoundException;
@@ -78,18 +79,24 @@ class CallFormController extends AbstractController
         }
     }
 
+    /**
+     * @throws ExceptionInterface
+     */
     #[Route(
         path: '/api/v0/admin/call-form/{id}',
         requirements: ['id' => Requirement::UUID_V4],
         methods: 'PATCH'
     )]
     public function update(
-        #[ValueResolver('map_request_payload')] CallFormUpdateDto $dto,
+        #[ValueResolver('map_request_payload')] CallFormPrimitiveUpdateDto $dto,
         string $id
     ): JsonResponse
     {
+        $updateParams = $this->serializer->normalize($dto);
+        $updateDto = $this->serializer->denormalize($updateParams, CallFormUpdateDto::class);
+
         try {
-            $this->service->update(new FormStatus($dto->status), $id);
+            $this->service->update($updateDto, $id);
 
             return $this->json(['success' => true], 204);
         } catch (CallFormNotFoundException) {

@@ -17,6 +17,7 @@ class CallForm {
     private array $files = [];
     private ?DateTimeImmutable $postedAt = null;
     private ?FormStatus $status = null;
+    private ?string $adminComment = null;
     private string $id;
 
     public function __construct(
@@ -126,5 +127,15 @@ class CallForm {
         }
 
         $this->status = $status;
+    }
+
+    public function getAdminComment(): ?string
+    {
+        return $this->adminComment;
+    }
+
+    public function setAdminComment(?string $adminComment): void
+    {
+        $this->adminComment = $adminComment;
     }
 }

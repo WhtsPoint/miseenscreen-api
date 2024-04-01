@@ -4,7 +4,7 @@ namespace App\Service;
 
 use App\Dto\CallFormCreationResultDto;
 use App\Dto\CallFormDto;
-use App\Dto\CallFormUpdateStatusDto;
+use App\Dto\CallFormUpdateDto;
 use App\Exception\CallFormNotFoundException;
 use App\Exception\FileIsAlreadyExistsException;
 use App\Exception\ReCaptchaIsInvalidException;
@@ -31,6 +31,7 @@ class CallFormService
     /**
      * @throws FileIsAlreadyExistsException
      * @throws ReCaptchaIsInvalidException
+     * @throws ThisStatusAlreadySetException
      */
     public function create(CallFormDto $dto, string $token): CallFormCreationResultDto
     {
@@ -59,11 +60,12 @@ class CallFormService
      * @throws CallFormNotFoundException
      * @throws ThisStatusAlreadySetException
      */
-    public function update(FormStatus $status, string $id): void
+    public function update(CallFormUpdateDto $dto, string $id): void
     {
         $callForm = $this->repository->getById($id);
 
-        $callForm->setStatus($status);
+        if ($dto->status !== null) $callForm->setStatus($dto->status);
+        if ($dto->adminComment !== null) $callForm->setAdminComment($dto->adminComment);
 
         $this->flusher->flush();
     }
