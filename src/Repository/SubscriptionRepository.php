@@ -54,7 +54,7 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
     {
         $pageCount = $this->entityManager->createQuery('SELECT COUNT(s.id) FROM App\Model\Subscription s')
             ->getSingleScalarResult();
-        $subscriptions = $this->entityManager->createQuery('SELECT s FROM App\Model\Subscription s')
+        $subscriptions = $this->entityManager->createQuery('SELECT s FROM App\Model\Subscription s ORDER BY s.postedAt DESC')
             ->setFirstResult($pagination->getFirst())
             ->setMaxResults($pagination->getCount())
             ->execute();

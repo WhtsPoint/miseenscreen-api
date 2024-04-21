@@ -44,7 +44,7 @@ class CallFormRepository implements CallFormRepositoryInterface
     {
         $formsCount = $this->entityManager->createQuery('SELECT COUNT(f.id) FROM App\Model\CallForm f')
             ->getSingleScalarResult();
-        $forms = $this->entityManager->createQuery('SELECT f FROM App\Model\CallForm f')
+        $forms = $this->entityManager->createQuery('SELECT f FROM App\Model\CallForm f ORDER BY f.postedAt DESC')
             ->setFirstResult($pagination->getFirst())
             ->setMaxResults($pagination->getCount())
             ->execute();

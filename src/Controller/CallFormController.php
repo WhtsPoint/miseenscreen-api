@@ -47,10 +47,10 @@ class CallFormController extends AbstractController
     {
         $creationParams = $this->serializer->normalize($dto);
         $callFormDto = $this->serializer->denormalize(
-            $creationParams,
+            [...$creationParams, 'files' => $dto->files],
             CallFormDto::class
         );
-
+        
         try {
             $response = $this->service->create($callFormDto, $dto->token);
 
