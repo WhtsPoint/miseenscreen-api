@@ -13,7 +13,6 @@ class CallFormDto
         public string $employeeNumber,
         public string $phone,
         public string $email,
-        public ?array $services = null,
         public ?array $files = null,
         public ?FormStatus $status = null
     ) {}

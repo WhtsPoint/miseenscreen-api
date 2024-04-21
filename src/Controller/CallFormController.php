@@ -40,6 +40,7 @@ class CallFormController extends AbstractController
     /**
      * @throws FileIsAlreadyExistsException
      * @throws ExceptionInterface when bad attempt to denormalize dto
+     * @throws ThisStatusAlreadySetException
      */
     #[Route(path: '/api/v0/call-form', methods: 'POST')]
     public function create(#[ValueResolver('map_request_payload')] CallFormCreationDto $dto): JsonResponse

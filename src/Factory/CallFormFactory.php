@@ -30,11 +30,8 @@ class CallFormFactory
             $dto->email,
         );
 
-        $form->setStatus($dto->status);
-
-        if ($dto->services !== null) {
-            $form->setServices(new Services($dto->services));
-        }
+        if ($dto->status !== null) $form->setStatus($dto->status);
+        if ($postedAt !== null) $form->setPostedAt($postedAt);
 
         foreach ($dto->files ?: [] as $file) {
             $form->addFile($file, $storage);

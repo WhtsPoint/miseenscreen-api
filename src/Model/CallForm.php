@@ -30,6 +30,7 @@ class CallForm {
     ) {
         $this->services = new Services([]);
         $this->id = (string) Uuid::v4();
+        $this->status = new FormStatus('inWork');
     }
 
     public function getId(): string

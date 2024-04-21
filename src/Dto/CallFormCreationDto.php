@@ -27,8 +27,6 @@ class CallFormCreationDto
         #[Length(min: 1, max: 100)]
         public string $email,
         public string $token,
-        #[Choice(FormStatus::VALUES)]
-        public string $status,
         #[Unique]
         #[All([new Choice(Services::VALUES)])]
         public ?array $services = null,
