@@ -23,7 +23,7 @@ services:
       - .:/var/www/html
       - ./.certbot/conf:/etc/nginx/certbot
     environment:
-      - PROJECT_DOMAIN=miseenscreee.com
+      - PROJECT_DOMAIN=miseenscreen.com
     ports:
       - 80:80
       - 443:443 
