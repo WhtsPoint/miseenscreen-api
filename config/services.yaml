@@ -18,6 +18,12 @@ services:
     App\Utils\ReCaptcha:
         arguments:
             - '%env(RECAPTCHA_SECRET_KEY)%'
+    App\Utils\RedisAdapter:
+        factory: ['@App\Factory\RedisFactory', 'get']
+    App\Factory\RedisFactory:
+        arguments:
+            - '%env(REDIS_HOST)%'
+            - '%env(REDIS_PORT)%'
     App\Utils\CallFormFileStorage:
         arguments:
             - '%call_form_storage%'

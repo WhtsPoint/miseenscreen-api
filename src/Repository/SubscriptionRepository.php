@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Exception\SubscriptionNotFoundException;
+use App\Interface\CacheInterface;
 use App\Interface\SubscriptionRepositoryInterface;
 use App\Model\Subscription;
 use App\Utils\Email;
@@ -16,7 +17,9 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
     private EntityRepository $repository;
 
     public function __construct(
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
+        private CacheInterface $cache,
+        private int $paginationCacheExpire = 3600
     ) {
         $this->repository = $this->entityManager->getRepository(Subscription::class);
     }
@@ -52,13 +55,26 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
 
     public function getAll(Pagination $pagination): PaginatedSubscriptions
     {
-        $pageCount = $this->entityManager->createQuery('SELECT COUNT(s.id) FROM App\Model\Subscription s')
-            ->getSingleScalarResult();
-        $subscriptions = $this->entityManager->createQuery('SELECT s FROM App\Model\Subscription s ORDER BY s.postedAt DESC')
-            ->setFirstResult($pagination->getFirst())
-            ->setMaxResults($pagination->getCount())
-            ->execute();
+        $cacheKey = 'subscriptions.pagination.' . $pagination->getCount() . '.' . $pagination->getPage();
+        $cache = $this->cache->get($cacheKey);
+        $pageCount = ceil($this->getCount() / $pagination->getCount());
 
-        return new PaginatedSubscriptions($subscriptions, ceil($pageCount / $pagination->getCount()));
+        if (is_string($cache) === false) {
+            $subscriptions = $this->entityManager->createQuery('SELECT s FROM App\Model\Subscription s ORDER BY s.postedAt DESC')
+                ->setFirstResult($pagination->getFirst())
+                ->setMaxResults($pagination->getCount())
+                ->execute();
+            $this->cache->set($cacheKey, serialize($subscriptions), $this->paginationCacheExpire);
+
+            return new PaginatedSubscriptions($subscriptions, $pageCount);
+        }
+
+        return new PaginatedSubscriptions(unserialize($cache), $pageCount);
+    }
+
+    public function getCount(): int
+    {
+        return $this->entityManager->createQuery('SELECT COUNT(s.id) FROM App\Model\Subscription s')
+            ->getSingleScalarResult();
     }
 }

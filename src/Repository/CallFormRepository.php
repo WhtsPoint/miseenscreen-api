@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Exception\CallFormNotFoundException;
+use App\Interface\CacheInterface;
 use App\Interface\CallFormRepositoryInterface;
 use App\Model\CallForm;
 use App\Utils\PaginatedCallForms;
@@ -15,7 +16,9 @@ class CallFormRepository implements CallFormRepositoryInterface
     private EntityRepository $repository;
 
     public function __construct(
-        public EntityManagerInterface $entityManager
+        public EntityManagerInterface $entityManager,
+        private CacheInterface $cache,
+        private int $paginationCacheExpire = 3600
     ) {
         $this->repository = $this->entityManager->getRepository(CallForm::class);
     }
@@ -42,15 +45,22 @@ class CallFormRepository implements CallFormRepositoryInterface
 
     public function getAll(Pagination $pagination): PaginatedCallForms
     {
-        $formsCount = $this->entityManager->createQuery('SELECT COUNT(f.id) FROM App\Model\CallForm f')
-            ->getSingleScalarResult();
-        $forms = $this->entityManager->createQuery('SELECT f FROM App\Model\CallForm f ORDER BY f.postedAt DESC')
-            ->setFirstResult($pagination->getFirst())
-            ->setMaxResults($pagination->getCount())
-            ->execute();
+        $cacheKey = 'call_form.pagination.' . $pagination->getCount() . '.' . $pagination->getPage();
+        $formsCount = ceil($this->getCount() / $pagination->getCount());
+        $cache = $this->cache->get($cacheKey);
 
+        if (is_string($cache) === false) {
+            $forms = $this->entityManager->createQuery('SELECT f FROM App\Model\CallForm f ORDER BY f.postedAt DESC')
+                ->setFirstResult($pagination->getFirst())
+                ->setMaxResults($pagination->getCount())
+                ->execute();
 
-        return new PaginatedCallForms($forms, ceil($formsCount / $pagination->getCount()));
+            $this->cache->set($cacheKey, serialize($forms), $this->paginationCacheExpire);
+
+            return new PaginatedCallForms($forms, $formsCount);
+        }
+
+        return new PaginatedCallForms(unserialize($cache), $formsCount);
     }
 
     /**
@@ -69,5 +79,11 @@ class CallFormRepository implements CallFormRepositoryInterface
     public function isExists(string $id): bool
     {
         return $this->repository->count(['id' => $id]) !== 0;
+    }
+
+    public function getCount(): int
+    {
+        return $this->entityManager->createQuery('SELECT COUNT(f.id) FROM App\Model\CallForm f')
+            ->getSingleScalarResult();
     }
 }
