@@ -8,6 +8,15 @@ services:
       - ./.mysql/data:/var/lib/mysql
     networks:
       - api-miseenscreen
+  redis:
+    image: redis:6.2-alpine
+    environment:
+      - REDIS_PASSWORD=admin
+    volumes:
+      - /.redis/dаta:/root/redis
+      - /.redis/redis.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      - api-miseenscreen
   php-fpm:
     build: .
     restart: always
