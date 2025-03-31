@@ -13,6 +13,7 @@ class Services implements ValueObjectInterface
         'elearning',
         'hrSoftware',
         'analytics',
+        'crm',
         'other'
     ];
     /**
