@@ -1,7 +1,7 @@
 # IP-based deployment of the API + the single nginx entrypoint.
 # Publishes:
-#   :5553 -> API
-#   :5554 -> UI (proxied to the `ui` container on the shared `miseenscreen` network)
+#   :4448 -> API
+#   :4447 -> UI (proxied to the `ui` container on the shared `miseenscreen` network)
 #
 # Usage:
 #   docker network create miseenscreen   # once, if it does not exist yet
@@ -37,8 +37,8 @@ services:
       - ./nginx/nginx-ip.conf:/etc/nginx/conf.d/default.conf
       - .:/var/www/html
     ports:
-      - 5553:5553
-      - 5554:5554
+      - 4448:4448
+      - 4447:4447
     networks:
       - api-miseenscreen
 
