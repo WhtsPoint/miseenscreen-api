@@ -1,7 +1,7 @@
 FROM php:8.1-fpm
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl git wget zip unzip libzip-dev libxml2-dev libpng-dev libpq-dev vim  \
+    curl git wget zip unzip libzip-dev libxml2-dev libpng-dev libpq-dev libicu-dev vim  \
     && docker-php-ext-install pdo pdo_mysql soap zip opcache gd intl
 
 COPY php-fpm/php.ini /usr/local/etc/php/php.ini
